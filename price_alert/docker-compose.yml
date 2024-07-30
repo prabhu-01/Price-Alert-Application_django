@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn price_alert.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgres://prabhu01:PB@post123@db:5432/price_alert_db
+      - REDIS_URL=redis://redis:6379/1
+    entrypoint: ["/app/entrypoint.sh"]
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=price_alert_db
+      - POSTGRES_USER=prabhu01
+      - POSTGRES_PASSWORD=PB@post123
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:

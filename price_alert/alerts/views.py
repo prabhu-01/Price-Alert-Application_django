@@ -4,7 +4,10 @@ from .serializers import AlertSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from django.core.cache import cache
+from django.views.generic import TemplateView
 
+class HomeView(TemplateView):
+    template_name = 'home.html'
 class CreateAlertView(generics.CreateAPIView):
     queryset = Alert.objects.all()
     serializer_class = AlertSerializer
